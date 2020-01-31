@@ -36,18 +36,25 @@ void setup() {
 void loop () {
   for (int i = 0; i < 255; i++) {
     analogWrite12(0,GammaCorrection(i));
-    delayMicroseconds(15686);
+    delayMicroseconds(9295);
   } 
-  for (int i = 0; i <= 125; i++) {
-    // int led_sin = ((cos(i*0.1)+1)*127);
+  for (int i = 0; i <= 62; i++) {
     int led_sin = ((cos(i*0.1)+1.4)*106);
     analogWrite12(0,GammaCorrection(led_sin));
-    delayMicroseconds(32000);
-  }   
+    delayMicroseconds(3000);
+  }
+  analogWrite12(0,GammaCorrection(255));  
+  delay(7000); 
+  for (int i = 0; i <= 62; i++) {
+    int led_sin = ((cos(i*0.1)+1.4)*106);
+    analogWrite12(0,GammaCorrection(led_sin));
+    delayMicroseconds(3000);
+  }  
   for (int i = 255; i >= 0; i--) {
     analogWrite12(0,GammaCorrection(i));
-    delayMicroseconds(15686);
+    delayMicroseconds(31373);
   }      
+  while(true);
 }
 
 uint16_t GammaCorrection(uint8_t brightness){
