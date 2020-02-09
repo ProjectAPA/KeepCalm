@@ -1,7 +1,5 @@
 #include <Arduino.h>
 
-
-
 enum{
   RedLed = 4,
   GreenLed = 3,
