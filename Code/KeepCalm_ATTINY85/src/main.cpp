@@ -2,36 +2,27 @@
 
 void TimerOneConfig();
 
-typedef struct LED_PIN{
+typedef struct LED_PINS{
   int high_pin;
   int low_pin;
+  int status;
 };
 
-typedef struct LED_ROW{
-  LED_PIN led_pins[8];
-  int row_length;
-};
-
-LED_ROW led_row[3];
+ LED_PINS led_pins[19]{
+    {0,1,0},{1,0,0},{0,4,0},{4,0,0},
+    {2,4,0},{2,0,0},{0,2,0},{3,2,0},{2,3,0},{2,1,0},{2,1,0},
+    {3,4,0},{4,3,0},{1,4,0},{4,1,0},{1,3,0},{3,1,0},{0,3,0},{3,0,0}
+  };
 
 void setup() {
   MCUCR |= (1 << PUD);
-
-  pinMode(0, OUTPUT);
-  digitalWrite(0, HIGH);
-  delay(1000);
-  digitalWrite(0, LOW);
   TimerOneConfig();
-  LED_ROW led_row[]{
-    {{{0,1},{1,0},{0,4},{4,0}},4},
-    {{{2,4},{2,0},{0,2},{3,2},{2,3},{2,1},{2,1}},7},
-    {{{3,4},{4,3},{1,4},{4,1},{1,3},{3,1},{0,3},{3,0}},8}
-  };
+
+  led_pins[0].status = 1;
+  led_pins[1].status = 1;
 }
 
 void loop() {
-  int test = led_row[0].led_pins[0].high_pin;
-  test++;
 }
 
 void TimerOneConfig(){
@@ -53,14 +44,17 @@ void TimerOneConfig(){
 
 ISR (TIM1_COMPA_vect){
   static volatile uint8_t count = 0;
-  static volatile uint8_t row = 0;
-  static volatile uint8_t pin = 0;
   count++;
-  DDRB = 0;
-  PORTB  |= 0b0011111;
-  if (pin < led_row[row].row_length){
+  if (count == 20){
+    count = 0;
   }
-  digitalWrite(led_row[row].led_pins[pin].high_pin,HIGH);
-  digitalWrite(led_row[row].led_pins[pin].low_pin,LOW);
-
+  DDRB = 0;
+  PORTB = 0;
+  //led_pins[count].status
+  if (led_pins[count].status == 1){
+    pinMode(led_pins[count].high_pin, OUTPUT);
+    pinMode(led_pins[count].low_pin, OUTPUT);
+    digitalWrite(led_pins[count].high_pin,HIGH);
+    digitalWrite(led_pins[count].low_pin,LOW);
+  }
 }
