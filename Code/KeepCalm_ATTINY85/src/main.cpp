@@ -1,7 +1,6 @@
-#define TIMER_TO_USE_FOR_MILLIS 0
 #include <Arduino.h>
 
-void TimerOneConfig();
+void TimerZeroConfig();
 
 typedef struct LED_PINS{
   int high_pin;
@@ -31,27 +30,7 @@ void setup() {
   DDRB = 0;
   MCUCR |= (1 << PUD);
 
-  // led_pins[0].status = 1;
-  // led_pins[1].status = 1;
-  // led_pins[2].status = 1;
-  // led_pins[3].status = 1;
-  // led_pins[4].status = 1;
-  // led_pins[5].status = 1;
-  // led_pins[6].status = 1;
-  // led_pins[7].status = 1;
-  // led_pins[8].status = 1;
-  // led_pins[9].status = 1;
-  // led_pins[10].status = 1;
-  // led_pins[11].status = 1;
-  // led_pins[12].status = 1;
-  // led_pins[13].status = 1;
-  // led_pins[14].status = 1;
-  // led_pins[15].status = 1;
-  // led_pins[16].status = 1;
-  // led_pins[17].status = 1;
-  // led_pins[18].status = 1;
-
-  TimerOneConfig();
+  TimerZeroConfig();
   
 }
 
@@ -60,39 +39,33 @@ void loop() {
   for (int i = 0; i < 19; i++){
     led_pins[i].status = 1;
     time_now = millis();
-  //   while(millis() < time_now + period){
-  //       //wait approx. [period] ms
-  //   }
-  delay(33000);
+    while(millis() < time_now + period){
+        //wait approx. [period] ms
+    }
   }
   
-
-
   // for (int i = 0; i < 19; i++){
   //   led_pins[i].status = 1;
   // }  
 }
 
-void TimerOneConfig(){
+void TimerZeroConfig(){
   cli();
 
-  TCCR1 = 0;
-  TIMSK = 0;
+  TCCR0A = 0;
 
-  TCCR1 |= (1 << CTC1);
+  TCCR0A |= (1 << WGM01);
 
-  TCCR1 |= (1 << CS12);
-  TCCR1 |= (1 << CS11);
+  TCCR0B |= (1 << CS01);
 
-  OCR1A = 20;
-  OCR1C = 20;
+  OCR0A  = 20;
 
-  TIMSK |= (1 << OCIE1A);
+  TIMSK |= (1 << OCIE0A);
 
   sei();
 }
 
-ISR (TIM1_COMPA_vect){
+ISR (TIM0_COMPA_vect){
   static volatile uint8_t count = 0;
 
   PORTB = 0;
