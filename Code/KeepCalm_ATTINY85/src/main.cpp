@@ -15,13 +15,6 @@ LED_PINS led_pins[19]{
     {3,4,0},{4,3,0},{1,4,0},{4,1,0},{1,3,0},{3,1,0},{0,3,0},{3,0,0}
   };
 
-//  LED_PINS led_pins[19]{
-//     {1,0,0},{0,1,0},{1,0,0},{0,1,0},{1,0,0},
-//     {0,1,0},{1,0,0},{0,1,0},{1,0,0},{0,1,0},
-//     {1,0,0},{0,1,0},{1,0,0},{0,1,0},{1,0,0},
-//     {0,1,0},{1,0,0},{0,1,0},{1,0,0}
-//   };
-
 int period = 1000;
 unsigned long time_now = 0;
 
@@ -30,26 +23,6 @@ void setup() {
   PORTB = 0;
   DDRB = 0;
   MCUCR |= (1 << PUD);
-
-  // led_pins[0].status = 1;
-  // led_pins[1].status = 1;
-  // led_pins[2].status = 1;
-  // led_pins[3].status = 1;
-  // led_pins[4].status = 1;
-  // led_pins[5].status = 1;
-  // led_pins[6].status = 1;
-  // led_pins[7].status = 1;
-  // led_pins[8].status = 1;
-  // led_pins[9].status = 1;
-  // led_pins[10].status = 1;
-  // led_pins[11].status = 1;
-  // led_pins[12].status = 1;
-  // led_pins[13].status = 1;
-  // led_pins[14].status = 1;
-  // led_pins[15].status = 1;
-  // led_pins[16].status = 1;
-  // led_pins[17].status = 1;
-  // led_pins[18].status = 1;
 
   TimerOneConfig();
   
@@ -65,12 +38,11 @@ void loop() {
   //   }
   delay(33000);
   }
-  
 
-
-  // for (int i = 0; i < 19; i++){
-  //   led_pins[i].status = 1;
-  // }  
+  for (int i = 0; i < 19; i++){
+    led_pins[i].status = 0;
+  }
+  while(true);  
 }
 
 void TimerOneConfig(){
