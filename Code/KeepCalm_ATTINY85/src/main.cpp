@@ -1,5 +1,8 @@
 #define TIMER_TO_USE_FOR_MILLIS 0
 #include <Arduino.h>
+#include <avr/sleep.h>
+
+#define adc_disable() (ADCSRA &= ~(1<<ADEN)) // disable ADC (before power-off)
 
 void TimerOneConfig();
 
@@ -20,6 +23,9 @@ unsigned long time_now = 0;
 
 void setup() {
 
+  adc_disable();
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+
   PORTB = 0;
   DDRB = 0;
   MCUCR |= (1 << PUD);
@@ -32,7 +38,7 @@ void loop() {
 
   for (int i = 0; i < 19; i++){
     led_pins[i].status = 1;
-    time_now = millis();
+  //  time_now = millis();
   //   while(millis() < time_now + period){
   //       //wait approx. [period] ms
   //   }
@@ -42,7 +48,10 @@ void loop() {
   for (int i = 0; i < 19; i++){
     led_pins[i].status = 0;
   }
-  while(true);  
+  cli();
+  sleep_enable();
+  sleep_bod_disable();
+  sleep_cpu();
 }
 
 void TimerOneConfig(){
